@@ -9,27 +9,27 @@ import kha.System;
 class AppImpl extends AppBase {
     private var _callback:Void->Void;
     private var _backgroudColor:Int = 0;
-    
+
     public function new() {
     }
-    
+
     private override function init(callback:Void->Void, onEnd:Void->Void = null) {
         _callback = callback;
         var title:String = Toolkit.backendProperties.getProp("haxe.ui.kha.title", "");
         var width:Int = Toolkit.backendProperties.getPropInt("haxe.ui.kha.width", -1);
         var height:Int = Toolkit.backendProperties.getPropInt("haxe.ui.kha.height", -1);
-        
-        #if js
+
+        #if (kha_html5 || kha_debug_html5)
         var canvas = cast(js.Browser.document.getElementById(kha.Macros.canvasId()), js.html.CanvasElement);
         if (width != -1) {
             canvas.width = width;
         }
         if (height != -1) {
-            canvas.height = height;      
+            canvas.height = height;
         }
         canvas.style.outline = "none";
         #end
-        
+
         _backgroudColor = ColorUtil.parseColor(Toolkit.backendProperties.getProp("haxe.ui.kha.background.color", "0xFFFFFF"));
         System.start( { title: title, width: width, height: height }, initialized);
     }
