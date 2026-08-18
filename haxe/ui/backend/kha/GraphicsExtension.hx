@@ -23,7 +23,7 @@ class GraphicsExtension {
 	 */
 	public static function drawArc(g2: Graphics, cx: Float, cy: Float, radius: Float, sAngle: Float, eAngle: Float, strength: Float = 1, ccw: Bool = false,
 			segments: Int = 0): Void {
-		#if kha_html5
+		#if (kha_html5 || kha_debug_html5)
 		if (kha.SystemImpl.gl == null) {
 			var g: kha.js.CanvasGraphics = cast g2;
 			radius -= strength / 2; // reduce radius to fit the line thickness within image width/height
@@ -72,7 +72,7 @@ class GraphicsExtension {
 	 */
 	public static function fillArc(g2: Graphics, cx: Float, cy: Float, radius: Float, sAngle: Float, eAngle: Float, ccw: Bool = false,
 			segments: Int = 0): Void {
-		#if kha_html5
+		#if (kha_html5 || kha_debug_html5)
 		if (kha.SystemImpl.gl == null) {
 			var g: kha.js.CanvasGraphics = cast g2;
 			g.fillArc(cx, cy, radius, sAngle, eAngle, ccw);
@@ -119,7 +119,7 @@ class GraphicsExtension {
 	 * @param	segments (optional) The amount of lines that should be used to draw the circle.
 	 */
 	public static function drawCircle(g2: Graphics, cx: Float, cy: Float, radius: Float, strength: Float = 1, segments: Int = 0): Void {
-		#if kha_html5
+		#if (kha_html5 || kha_debug_html5)
 		if (kha.SystemImpl.gl == null) {
 			var g: kha.js.CanvasGraphics = cast g2;
 			radius -= strength / 2; // reduce radius to fit the line thickness within image width/height
@@ -174,7 +174,7 @@ class GraphicsExtension {
 	 * @param	segments (optional) The amount of lines that should be used to draw the circle.
 	 */
 	public static function fillCircle(g2: Graphics, cx: Float, cy: Float, radius: Float, segments: Int = 0): Void {
-		#if kha_html5
+		#if (kha_html5 || kha_debug_html5)
 		if (kha.SystemImpl.gl == null) {
 			var g: kha.js.CanvasGraphics = cast g2;
 			g.fillCircle(cx, cy, radius);
@@ -313,7 +313,7 @@ class GraphicsExtension {
 	}
 
 	/**
-	 * Draws a quadratic bezier using 3 pairs of points. 
+	 * Draws a quadratic bezier using 3 pairs of points.
 	 * Provide x and y in the following order: startPoint, controlPoint, endPoint
 	 */
 	public static function drawQuadraticBezier(g2: Graphics, x: Array<Float>, y: Array<Float>, segments: Int = 20, strength: Float = 1.0): Void {
