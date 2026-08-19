@@ -81,7 +81,7 @@ class TextDisplayImpl extends TextBase {
         var biggestWidth:Float = 0;
         for (line in lines) {
             var tw = _font.width(Std.int(_fontSize), line);
-            if (tw > maxWidth) {
+            if (tw > maxWidth && _displayData.wordWrap) {
                 var words = Lambda.list(line.split(" "));
                 while (!words.isEmpty()) {
                     line = words.pop();
