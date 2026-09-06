@@ -29,13 +29,13 @@ class ScreenImpl extends ScreenBase {
             MouseHelper.init(options != null ? options.mouseInput : null);
         }
     }
-
+    
     private function initKeyboard() {
         if (!KeyboardHelper.isInitialized()) {
             KeyboardHelper.init(options != null ? options.keyboardInput : null);
         }
     }
-
+    
     public override function get_width():Float {
         return System.windowWidth() / Toolkit.scaleX;
     }
@@ -57,7 +57,7 @@ class ScreenImpl extends ScreenBase {
     }
 
     private override function get_title():String {
-        #if (kha_html5 || kha_debug_html5)
+        #if js
         return js.Browser.document.title;
         #else
         trace("WARNING: this platform doesnt support dynamic titles");
@@ -65,7 +65,7 @@ class ScreenImpl extends ScreenBase {
         #end
     }
     private override function set_title(s:String):String {
-        #if (kha_html5 || kha_debug_html5)
+        #if js
         js.Browser.document.title = s;
         return s;
         #else
