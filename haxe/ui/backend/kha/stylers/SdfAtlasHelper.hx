@@ -38,7 +38,9 @@ class SdfAtlasHelper {
              + s.borderRightSize + "_"
              + s.backgroundColor + "_"
              + s.backgroundColorEnd + "_"
-             + s.backgroundGradientStyle
+             + s.backgroundGradientStyle + "_"
+             + s.backgroundOpacity + "_"
+             + s.opacity
         ;
     }
 
@@ -135,10 +137,9 @@ class StfAtlasInfo {
         if (style.backgroundColor == null) {
             painter.opacity = 0;
         } else {
-            if (style.opacity != null && style.opacity != 1) {
-                painter.opacity = style.opacity;
-            } else {
-                painter.opacity = 1;
+            painter.opacity = (style.opacity != null) ? style.opacity : 1;
+            if (style.backgroundOpacity != null) {
+                painter.opacity *= style.backgroundOpacity;
             }
         }
         if (style.borderColor != null) {
