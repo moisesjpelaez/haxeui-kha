@@ -2,6 +2,7 @@ package haxe.ui.backend;
 
 import kha.Font;
 import kha.graphics2.Graphics;
+import haxe.ui.components.Label;
 
 class TextDisplayImpl extends TextBase {
     private var _font:Font;
@@ -9,23 +10,31 @@ class TextDisplayImpl extends TextBase {
     private var _fontSize:Float = 14;
     private var _fontName:String;
     private var _color:Int;
+    private var _autoWidth(get, null):Bool;
 
     public function new() {
         super();
         _fontSize = 14 * Toolkit.scale;
     }
-    
+
+    private function get__autoWidth():Bool {
+        if ((parentComponent is Label)) {
+            return cast(parentComponent, Label).autoWidth;
+        }
+        return false;
+    }
+
     //***********************************************************************************************************
     // Validation functions
     //***********************************************************************************************************
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
-        
+
         if (_textStyle != null) {
             if (_textAlign != _textStyle.textAlign) {
                 _textAlign = _textStyle.textAlign;
             }
-            
+
             if (_textStyle.fontSize != null && _fontSize != _textStyle.fontSize) {
                 _fontSize = _textStyle.fontSize * Toolkit.scale;
                 measureTextRequired = true;
@@ -35,15 +44,15 @@ class TextDisplayImpl extends TextBase {
                 _font = _fontInfo.data;
                 measureTextRequired = true;
             }
-            
+
             if (_color != _textStyle.color) {
                 _color = _textStyle.color;
             }
         }
-        
+
         return measureTextRequired;
     }
-    
+
     private override function validateDisplay() {
         if (_width == 0 && _textWidth > 0) {
             _width = _textWidth;
@@ -52,7 +61,7 @@ class TextDisplayImpl extends TextBase {
             _height = _textHeight;
         }
     }
-    
+
     private var _lines:Array<String>;
     private override function measureText() {
         if (_text == null || _text.length == 0 || _font == null) {
@@ -75,13 +84,14 @@ class TextDisplayImpl extends TextBase {
         }
 
 
+        var wrap:Bool = _autoWidth == false && _displayData.wordWrap;
         var maxWidth:Float = _width * Toolkit.scale;
         _lines = new Array<String>();
         var lines = _text.split("\n");
         var biggestWidth:Float = 0;
         for (line in lines) {
             var tw = _font.width(Std.int(_fontSize), line);
-            if (tw > maxWidth) {
+            if (wrap && tw > maxWidth) {
                 var words = Lambda.list(line.split(" "));
                 while (!words.isEmpty()) {
                     line = words.pop();
@@ -108,10 +118,10 @@ class TextDisplayImpl extends TextBase {
 
         _textWidth = biggestWidth / Toolkit.scale;
         _textHeight = (_font.height(Std.int(_fontSize)) * _lines.length) / Toolkit.scale;
-        
+
         _textWidth = Math.round(_textWidth + 1);
         _textHeight = Math.round(_textHeight);
-        
+
         if (_textWidth % 2 != 0) {
             _textWidth++;
         }
@@ -128,7 +138,7 @@ class TextDisplayImpl extends TextBase {
             var ty:Float = y + _top;
             for (line in _lines) {
                 var tx:Float = x;
-            
+
                 switch(_textAlign) {
                     case "center":
                         tx += ((_width - _textWidth) * Toolkit.scale) / 2;
