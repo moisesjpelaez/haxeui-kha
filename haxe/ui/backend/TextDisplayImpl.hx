@@ -10,18 +10,12 @@ class TextDisplayImpl extends TextBase {
     private var _fontSize:Float = 14;
     private var _fontName:String;
     private var _color:Int;
-    private var _autoWidth(get, null):Bool;
+    private var _autoWidth:Bool;
 
     public function new() {
         super();
         _fontSize = 14 * Toolkit.scale;
-    }
-
-    private function get__autoWidth():Bool {
-        if ((parentComponent is Label)) {
-            return cast(parentComponent, Label).autoWidth;
-        }
-        return false;
+        _autoWidth = parentComponent is Label ? cast(parentComponent, Label).autoWidth : false;
     }
 
     //***********************************************************************************************************
